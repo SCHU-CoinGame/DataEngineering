@@ -81,7 +81,7 @@ def collect_save_data(batch_size):
         ws = create_connection("wss://api.upbit.com/websocket/v1")
         ws.send(json.dumps([
             {"ticket": "ticker-test"},
-            {"type": "ticker", "codes": market_codes, "format": "SIMPLE"} # real-time
+            {"type": "ticker", "codes": market_codes, "format": "SIMPLE"}
         ]))
     except Exception as e:
         print(f"Error connection to WebSocket: {e}")

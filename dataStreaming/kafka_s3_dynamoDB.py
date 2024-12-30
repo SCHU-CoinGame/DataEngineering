@@ -12,10 +12,11 @@ spark = SparkSession.builder \
     .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.2.0") \
     .config("spark.hadoop.fs.s3a.endpoint", "s3.ap-northeast-2.amazonaws.com") \
     .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
-    .config("spark.executor.memory", "5g") \
+    .config("spark.executor.memory", "4g") \
     .config("spark.executor.cores", "4") \
-    .config("spark.executor.instances", "3") \
-    .config("spark.driver.memory", "6g") \
+    .config("spark.executor.instances", "4") \
+    .config("spark.streaming.concurrentJobs", "4") \
+    .config("spark.driver.memory", "4g") \
     .config("spark.master", "yarn") \
     .getOrCreate()
 
@@ -27,6 +28,7 @@ kafka_df = spark.readStream \
     .option("kafka.bootstrap.servers", kafka_bootstrap_servers) \
     .option("subscribe", kafka_topic) \
     .option("startingOffsets", "latest") \
+    .option("group.id", "upbit-consumer-group") \
     .option("failOnDataLoss", "false") \
     .load()
 
@@ -48,7 +50,6 @@ json_df = kafka_df.selectExpr("CAST(value AS STRING) as json") \
     .select(from_json(col("json"), schema).alias("data")) \
     .select("data.*")
 
-#coin_codes = ['KRW-BTC', 'KRW-SXP', 'KRW-SUI', 'KRW-ARK', 'KRW-SHIB', 'KRW-SEI', 'KRW-HIFI', 'KRW-XRP', 'KRW-UXLINK']
 def write_to_dynamodb(batch_df, batch_id):
     selected_df = batch_df.select(
         col("code"),
@@ -87,15 +88,5 @@ query_dynamodb = json_df.writeStream \
     .outputMode("append") \
     .start()
 
-# query_s3 = json_df.writeStream \
-#     .outputMode("append") \
-#     .format("csv") \
-#     .option("path", "s3a://aws-s3-bucket-fastcampus/dataLake_upbit/") \
-#     .option("checkpointLocation", "s3a://aws-s3-bucket-fastcampus/checkpoint/") \
-#     .option("header", "true") \
-#     .trigger(processingTime='45 seconds') \
-#     .start()
-
 query_dynamodb.awaitTermination()
-# query_s3.awaitTermination()
 
