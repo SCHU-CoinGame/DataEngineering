@@ -18,7 +18,7 @@ Welcome to the **Coin Prediction King** (‘코인예측왕’) Data Engineering
 
 ## 🚀 **Architecture**
 
-![Coin Prediction King Architecture](assets/architecture.jpg)
+![Coin Prediction King Architecture](assets/CoinKing_DataPipeLine_Architecture.jpg)
 
 ```
 Upbit WebSocket → On-premises Kafka Streams → DynamoDB →
