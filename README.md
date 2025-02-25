@@ -42,22 +42,11 @@ Frontend Post Requests Click Stream Data (json) → API Gateway → AWS Lambda �
 ## 📁 **Repository Structure**
 
 ```bash
-├── dataIngestion/               # Kafka Streaming scripts
-├── dataLake/                    # S3 storage management
-├── dataProcessing/              # Spark-based data analytics scripts
-├── logs/                        # Log files (ignored in Git)
+├── dataStreaming/               # Kafka Streaming scripts
+├── market_code/                 # Market Code 
+├── dataAnalysis/                # Spark-based data analytics scripts
 ├── .gitignore                   # Files excluded from Git
 ├── assets/
 │   └── architecture.jpg
 └── README.md
 ```
-
----
-
-## 🔧 **How to Contribute**
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/new-feature`)
-3. Commit your changes (`git commit -m 'Add new feature'`)
-4. Push to the branch (`git push origin feature/new-feature`)
-5. Open a Pull Request
